@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class PeopleCollectionTest {
     @Test
-    public void hasSame() throws Exception {
+	public void hasSame() throws Exception {
 
 
         People jo = new People();

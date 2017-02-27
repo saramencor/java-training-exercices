@@ -18,7 +18,7 @@ public class GenerationTest {
 
     @Before
     public void setUp() throws Exception {
-        generation = new Generation();
+        generation = new Generation(0, 0);
 
     }
 

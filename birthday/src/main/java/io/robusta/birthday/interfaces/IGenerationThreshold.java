@@ -19,8 +19,10 @@ public interface IGenerationThreshold {
     int getBigNumber();
     
     float calculateProbabilityOfSame(int size);
+    
 
     int findSmallestNumberOfPeopleRequiredToHave50();
+    
 
 
 }

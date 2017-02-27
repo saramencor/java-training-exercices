@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * Created by Nicolas Zozol on 04/10/2016.
  */
-public class PeopleCollection extends ArrayList<People>implements IPeopleCollection<People> {
+public class PeopleCollection extends ArrayList<People> implements IPeopleCollection<People> {
 
 	public PeopleCollection() {
 
@@ -26,14 +26,18 @@ public class PeopleCollection extends ArrayList<People>implements IPeopleCollect
 		}
 	}
 
+	/*
+	 * return true if two people of the same collection has same birthday
+	 */
 	@Override
 	public boolean hasSame() {
-		
-		/* return true if two people of the same collection has
-		 same birthday
-		  */
-		
+
+		for (int i = 0; i < this.size(); i++) {
+			for (int j = 0; j < this.size(); j++) {
+				if (i != j && this.get(i).equals(this.get(j)))
+					return true;
+			}
+		}
 		return false;
 	}
-
 }

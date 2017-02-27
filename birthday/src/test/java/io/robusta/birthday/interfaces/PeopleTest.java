@@ -10,28 +10,27 @@ import static org.junit.Assert.*;
  */
 public class PeopleTest {
 
-    @Test
-    public void getBirthday() throws Exception {
-        People people = new People();
-        people.setBirthday(200);
-        assertTrue(people.getBirthday() == 200);
-    }
+	@Test
+	public void getBirthday() throws Exception {
+		People people = new People();
+		people.setBirthday(200);
+		assertTrue(people.getBirthday() == 200);
+	}
 
-    @Test
-    public void equals() throws Exception {
+	@Test
+	public void equals() throws Exception {
 
-        People jo = new People();
-        jo.setBirthday(200);
+		People jo = new People();
+		jo.setBirthday(200);
 
-        People jane = new People();
-        jane.setBirthday(200);
-        assertTrue(jane.equals(jo));
-        
-        People jack = new People();
-        jack.setBirthday(300);
-        assertFalse(jo.equals(jack));
+		People jane = new People();
+		jane.setBirthday(200);
+		assertTrue(jane.equals(jo));
 
+		People jack = new People();
+		jack.setBirthday(300);
+		assertFalse(jo.equals(jack));
 
-    }
+	}
 
 }

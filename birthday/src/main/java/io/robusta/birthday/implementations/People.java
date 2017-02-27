@@ -8,16 +8,21 @@ import io.robusta.birthday.interfaces.IPeople;
 public class People implements IPeople {
 
 	int birthday;
-    public void setBirthday(int date) {
-        this.birthday = date;
-    }
 
-    public int getBirthday() {
-        return this.birthday;
-    }
+	public void setBirthday(int date) {
+		this.birthday = date;
+	}
 
-    public boolean equals(IPeople people) {
-        // should be true if two people has same birthday
-    		return false;
-    }
+	public int getBirthday() {
+		return this.birthday;
+	}
+
+	// should be true if two people has same birthday
+	public boolean equals(IPeople people) {
+		if (this.getBirthday() == people.getBirthday())
+			return true;
+		else
+
+			return false;
+	}
 }
