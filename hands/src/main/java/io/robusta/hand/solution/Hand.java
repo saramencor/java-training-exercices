@@ -1,18 +1,15 @@
 package io.robusta.hand.solution;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.GroupLayout;
-
 import io.robusta.hand.Card;
-import io.robusta.hand.CardColor;
+
 import io.robusta.hand.HandClassifier;
 import io.robusta.hand.HandValue;
 import io.robusta.hand.interfaces.IDeck;
@@ -34,7 +31,10 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean beats(IHand villain) {
-
+		int winner = compareTo(villain);
+		if (winner == 1) {
+			return true;
+		}
 		return false;
 	}
 
@@ -155,13 +155,10 @@ public class Hand extends TreeSet<Card> implements IHand {
 				if (row.size() == 2) {
 					this.mainValue = row.get(0).getValue();
 					return true;
-
 				}
 			}
 		}
-
 		return false;
-
 	}
 
 	@Override
@@ -200,7 +197,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 		HashMap<Integer, List<Card>> group = group();
 		int taille = group.size();
 		if (taille == 5) {
-		return true;
+			return true;
 		}
 		return false;
 	}
@@ -216,6 +213,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 		if (taille == 3) {
 			for (List<Card> row : group.values()) {
 				if (row.size() > 2) {
+					this.mainValue = row.get(0).getValue();
 					return true;
 				}
 			}
@@ -234,11 +232,8 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 		if (taille == 2) {
 			for (List<Card> row : group.values()) {
-				if (row.size() == 1) {
-					this.secondValue=row.get(0).getValue();
-				}
 				if (row.size() == 4) {
-					this.mainValue=row.get(0).getValue();
+					this.mainValue = row.get(0).getValue();
 					return true;
 				}
 			}
@@ -340,9 +335,9 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean hasAce() {
-		int highest=highestValue();
-		for (int i=1; i<=5;i++){
-			if (highest==14){
+		int highest = highestValue();
+		for (int i = 1; i <= 5; i++) {
+			if (highest == 14) {
 				return true;
 			}
 		}
@@ -358,7 +353,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public int compareTo(IHandResolver o) {
-		return 0;
-	}
+		return this.getValue().compareTo(o.getValue());
 
+	}
 }
