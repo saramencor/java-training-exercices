@@ -52,14 +52,23 @@ public class Hand extends TreeSet<Card> implements IHand {
 	@Override
 	public boolean isStraight() {
 		List<Card> cards = new ArrayList<>();
-
 		cards.addAll(this);
-		for (int i = 1; i < 5; i++) {
-			if (cards.get(i).getValue() - cards.get(i - 1).getValue() != 1) {
-				return false;
+		if (hasAce() == true) {
+			System.out.println(cards);
+			for (int i = 1; i < 4; i++) {
+				if (cards.get(i).getValue() - cards.get(i - 1).getValue() != 1) {
+					return false;
+				}
 			}
+			return true;
+		} else {
+			for (int i = 1; i < 5; i++) {
+				if (cards.get(i).getValue() - cards.get(i - 1).getValue() != 1) {
+					return false;
+				}
+			}
+			return true;
 		}
-		return true;
 	}
 
 	@Override
@@ -205,14 +214,11 @@ public class Hand extends TreeSet<Card> implements IHand {
 	@Override
 	public boolean isTrips() {
 
-		List<Card> cards = new ArrayList<>();
-		cards.addAll(this);
 		HashMap<Integer, List<Card>> group = group();
 		int taille = group.size();
-
 		if (taille == 3) {
 			for (List<Card> row : group.values()) {
-				if (row.size() > 2) {
+				if (row.size() == 3) {
 					this.mainValue = row.get(0).getValue();
 					return true;
 				}
@@ -292,6 +298,12 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 			return handValue;
 		}
+		if (this.isTrips()) {
+			handValue.setClassifier(HandClassifier.TRIPS);
+			handValue.setLevelValue(this.last().getValue());
+
+			return handValue;
+		}
 		if (this.isStraight()) {
 			handValue.setClassifier(HandClassifier.STRAIGHT);
 			handValue.setLevelValue(this.last().getValue());
@@ -305,12 +317,6 @@ public class Hand extends TreeSet<Card> implements IHand {
 		}
 		if (this.isDoublePair()) {
 			handValue.setClassifier(HandClassifier.TWO_PAIR);
-			handValue.setLevelValue(this.last().getValue());
-
-			return handValue;
-		}
-		if (this.isTrips()) {
-			handValue.setClassifier(HandClassifier.TRIPS);
 			handValue.setLevelValue(this.last().getValue());
 
 			return handValue;
@@ -329,8 +335,15 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean hasCardValue(int level) {
-
+		List<Card> cards = new ArrayList<>();
+		cards.addAll(this);
+		for (Card current : this) {
+			if (current.getValue() == level) {
+				return true;
+			}
+		}
 		return false;
+
 	}
 
 	@Override

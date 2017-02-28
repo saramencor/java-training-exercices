@@ -77,7 +77,7 @@ public class IHandTest extends PokerTest {
 	}
 	
 	@Test
-	@Ignore
+	
 	public void testIsStraightWithAce() {
 		
 		IHand hand = newHand("4c 5c 2s 3s Ah");
