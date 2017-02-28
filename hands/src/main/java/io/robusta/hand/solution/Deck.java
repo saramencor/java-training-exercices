@@ -19,17 +19,14 @@ public class Deck extends LinkedList<Card> implements IDeck {
 
 	}
 
-	
-
 	@Override
 	public Card pick() {
 
-		Deck deck = new Deck();
-		Collections.shuffle(deck);
+		Collections.shuffle(this);
 
-		Card card = deck.getFirst();
+		Card card = this.getFirst();
 
-		deck.remove(card);
+		this.remove(card);
 		// shuffle;
 		// remove card from deck and returns it
 		return card;
@@ -38,13 +35,19 @@ public class Deck extends LinkedList<Card> implements IDeck {
 	@Override
 	public TreeSet<Card> pick(int number) {
 		// reuse pick()
-		return null;
+		TreeSet<Card> treeCard = new TreeSet<>();
+		for (int i = 0; i < number; i++) {
+			treeCard.add(pick());
+		}
+
+		return treeCard;
 	}
 
 	@Override
 	public Hand giveHand() {
-		// A hand is a **5** card TreeSet
-		return null;
+		Hand hand =new Hand();
+		hand.addAll(pick(5));
+		return hand;
 	}
 
 }
