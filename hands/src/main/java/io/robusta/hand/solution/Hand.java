@@ -147,10 +147,17 @@ public class Hand extends TreeSet<Card> implements IHand {
 	public boolean isPair() {
 		List<Card> cards = new ArrayList<>();
 		cards.addAll(this);
-
-		int taille = group().size();
+		HashMap<Integer, List<Card>> group = group();
+		int taille = group.size();
 		if (taille == 4) {
-			return true;
+
+			for (List<Card> row : group.values()) {
+				if (row.size() == 2) {
+					this.mainValue = row.get(0).getValue();
+					return true;
+
+				}
+			}
 		}
 
 		return false;
@@ -162,48 +169,59 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 		List<Card> cards = new ArrayList<>();
 		cards.addAll(this);
+		HashMap<Integer, List<Card>> group = group();
+		int taille = group.size();
+		List<Integer> cardHigher = new ArrayList<>();
+		if (taille == 2) {
+			for (List<Card> row : group.values()) {
+				if (row.size() == 2) {
+					cardHigher.add(row.get(0).getValue());
+				}
 
-		int taille = group().size();
-		if (taille == 3) {
-			for (int i = 1; i < 3; i++) {
-
-				List<Card> listC = new ArrayList<>();
-				listC = group().get(cards.get(i).getValue());
-				int tailleList = listC.size();
-				if (tailleList == 3) {
+				if (row.size() == 3) {
 					return false;
 				}
 			}
-			return true;
+			if (cardHigher.get(0) > cardHigher.get(1)) {
+				this.mainValue = cardHigher.get(0);
+				this.secondValue = cardHigher.get(1);
+			} else {
+				this.mainValue = cardHigher.get(1);
+				this.secondValue = cardHigher.get(0);
+			}
 		}
-		return false;
-	}
-
-	@Override
-	public boolean isHighCard() {
-
 		return true;
 	}
 
 	@Override
-	public boolean isTrips() {
+	public boolean isHighCard() {
 		List<Card> cards = new ArrayList<>();
 		cards.addAll(this);
+		HashMap<Integer, List<Card>> group = group();
+		int taille = group.size();
+		if (taille == 5) {
+		return true;
+		}
+		return false;
+	}
 
-		int taille = group().size();
+	@Override
+	public boolean isTrips() {
+
+		List<Card> cards = new ArrayList<>();
+		cards.addAll(this);
+		HashMap<Integer, List<Card>> group = group();
+		int taille = group.size();
+
 		if (taille == 3) {
-			for (int i = 1; i < 3; i++) {
-
-				List<Card> listC = new ArrayList<>();
-				listC = group().get(cards.get(i).getValue());
-				int tailleList = listC.size();
-				if (tailleList == 3) {
+			for (List<Card> row : group.values()) {
+				if (row.size() > 2) {
 					return true;
 				}
 			}
-			return false;
 		}
 		return false;
+
 	}
 
 	@Override
@@ -211,19 +229,19 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 		List<Card> cards = new ArrayList<>();
 		cards.addAll(this);
+		HashMap<Integer, List<Card>> group = group();
+		int taille = group.size();
 
-		int taille = group().size();
 		if (taille == 2) {
-			for (int i = 1; i < 2; i++) {
-
-				List<Card> listC = new ArrayList<>();
-				listC = group().get(cards.get(i).getValue());
-				int tailleList = listC.size();
-				if (tailleList == 4) {
+			for (List<Card> row : group.values()) {
+				if (row.size() == 1) {
+					this.secondValue=row.get(0).getValue();
+				}
+				if (row.size() == 4) {
+					this.mainValue=row.get(0).getValue();
 					return true;
 				}
 			}
-			return false;
 		}
 		return false;
 
@@ -231,26 +249,54 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isFull() {
+		List<Card> cards = new ArrayList<>();
+		cards.addAll(this);
+		HashMap<Integer, List<Card>> group = group();
+		int taille = group.size();
+
+		if (taille == 2) {
+			for (List<Card> row : group.values()) {
+				if (row.size() == 2) {
+					this.secondValue = row.get(0).getValue();
+				} else if (row.size() == 3) {
+					this.mainValue = row.get(0).getValue();
+					return true;
+				}
+			}
+		}
 		return false;
+
 	}
 
 	@Override
 	public boolean isStraightFlush() {
+		List<Card> cards = new ArrayList<>();
+		cards.addAll(this);
+
+		if ((isFlush() == true) && (isStraight() == true)) {
+			return true;
+		}
+
 		return false;
 	}
 
 	@Override
 	public HandValue getValue() {
 		HandValue handValue = new HandValue();
-
+		HashMap<Integer, List<Card>> group = group();
+		handValue.setOtherCards(this.getGroupRemainingsCard(group));
 		// Exemple for FourOfAKind ; // do for all classifiers
 		if (this.isFourOfAKind()) {
 			handValue.setClassifier(HandClassifier.FOUR_OF_A_KIND);
-			handValue.setLevelValue(this.mainValue);
-			handValue.setOtherCards(this.remainings); // or this.getRemainings()
+			handValue.setLevelValue(this.mainValue);// or this.getRemainings()
 			return handValue;
 		}
+		if (this.isStraightFlush()) {
+			handValue.setClassifier(HandClassifier.STRAIGHT_FLUSH);
+			handValue.setLevelValue(this.last().getValue());
 
+			return handValue;
+		}
 		if (this.isStraight()) {
 			handValue.setClassifier(HandClassifier.STRAIGHT);
 			handValue.setLevelValue(this.last().getValue());
@@ -259,27 +305,30 @@ public class Hand extends TreeSet<Card> implements IHand {
 		if (this.isPair()) {
 			handValue.setClassifier(HandClassifier.PAIR);
 			handValue.setLevelValue(this.last().getValue());
-			handValue.setOtherCards(this.remainings);
+
 			return handValue;
 		}
 		if (this.isDoublePair()) {
 			handValue.setClassifier(HandClassifier.TWO_PAIR);
 			handValue.setLevelValue(this.last().getValue());
-			handValue.setOtherCards(this.remainings);
+
 			return handValue;
 		}
 		if (this.isTrips()) {
 			handValue.setClassifier(HandClassifier.TRIPS);
 			handValue.setLevelValue(this.last().getValue());
-			handValue.setOtherCards(this.remainings);
+
 			return handValue;
 		}
-		if (this.isFourOfAKind()) {
-			handValue.setClassifier(HandClassifier.FOUR_OF_A_KIND);
-			handValue.setLevelValue(this.last().getValue());
-			handValue.setOtherCards(this.remainings);
+
+		if (this.isFull()) {
+			handValue.setClassifier(HandClassifier.FULL);
+			handValue.setLevelValue(this.mainValue);
+			handValue.setSecondLevel(this.secondValue);
+
 			return handValue;
 		}
+
 		return handValue;
 	}
 
@@ -291,13 +340,20 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean hasAce() {
+		int highest=highestValue();
+		for (int i=1; i<=5;i++){
+			if (highest==14){
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public int highestValue() {
-		// ace might be the highest value
-		return 0;
+		List<Card> cards = new ArrayList<>();
+		cards.addAll(this);
+		return this.last().getValue();
 	}
 
 	@Override

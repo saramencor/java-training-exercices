@@ -112,13 +112,18 @@ public class IHandTest extends PokerTest {
 	
 	@Test
 	public void testIsTrips() {
-		IHand hand = newHand("4c 2h 2c 2s Qc");
+		IHand hand = newHand("4c 2h 2s Qc 2c");
 		assertTrue(hand.getClassifier() == HandClassifier.TRIPS);
 	}
 	@Test
 	public void testIsFourOfAKind() {
 		IHand hand = newHand("2d 2h 2c 2s Qc");
 		assertTrue(hand.getClassifier() == HandClassifier.FOUR_OF_A_KIND);
+	}
+	@Test
+	public void testIsFull() {
+		IHand hand = newHand("2d Qd 2c 2s Qc");
+		assertTrue(hand.getClassifier() == HandClassifier.FULL);
 	}
 	
 	@Test
