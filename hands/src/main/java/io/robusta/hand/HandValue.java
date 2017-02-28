@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
- * In a HandValue, the As will often hanve a 14 value
+ * In a HandValue, the As will often have a 14 value
  * @author nicorama
  */
 public class HandValue implements Comparable<HandValue>{

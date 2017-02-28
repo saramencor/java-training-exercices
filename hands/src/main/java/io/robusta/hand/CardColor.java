@@ -6,7 +6,7 @@ public enum CardColor {
 	
 	char abbr;
 	int value;
-	
+	//le constructeur privé cest pour ne pas creer des types de cartes suplementaires
 	private CardColor(char abbr, int value){
 		this.abbr = abbr;
 		this.value = value;

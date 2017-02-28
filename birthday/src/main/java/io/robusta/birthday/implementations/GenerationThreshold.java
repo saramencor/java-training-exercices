@@ -26,30 +26,19 @@ public class GenerationThreshold implements IGenerationThreshold {
 
 	@Override
 	public int findSmallestNumberOfPeopleRequiredToHave50() {
-		int smallestNumber = 0;
-		
-		return smallestNumber;
+		int i = 1;
+		while (calculateProbabilityOfSame(i) < 0.5) {
+			i++;
+		}
+
+		return i;
 	}
 
 	@Override
 	public float calculateProbabilityOfSame(int size) {
-		float dates = 365;
-		float probSum = 1;
-		double totProbSum;
-		float factDate = dates - size;
-		float prob;
+		Generation generation = new Generation(10000, size);
 
-		while (dates > 0) {
-
-			prob = (dates / factDate);
-			dates--;
-			factDate--;
-			probSum = probSum + prob;
-
-		}
-
-		totProbSum = 1 - (probSum * (1 / (Math.pow(dates, size))));
-		return (float) totProbSum;
+		return (float) generation.getNumberOfCollectionsThatHasTwoPeopleWithSameBirthday() / 10000;
 
 	}
 }
